@@ -38,8 +38,6 @@ namespace IterativeMAPEstimation
                 {
                    bitacora.Escribir(ex.Message);
 
-                    MessageBox.Show(ex.Message);
-
                 }
             }
         }

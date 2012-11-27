@@ -30,7 +30,7 @@ namespace IterativeMAPEstimation.Bitacora
         {
             try
             {
-                sw = new StreamWriter(pathArchivo);
+                sw = new StreamWriter(pathArchivo,true);
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace IterativeMAPEstimation.Bitacora
                 MessageBox.Show(ex.Message + "\n" + "Error loading the StreamWriter ");
             }
             string hora = DateTime.Now.ToShortTimeString();
-            sw.WriteLine(fecha + "  " + hora + "  " + texto);
+            sw.WriteLine(fecha + "  " + hora + "  " + texto + "\n");
             sw.Close();
         
         }

@@ -9,14 +9,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using IterativeMAPEstimation.Bitacora;
 
 namespace IterativeMAPEstimation
 {
     public partial class frmMain : Form
     {
+        public Bitacora.Bitacora bitacora = new Bitacora.Bitacora();
+
         public frmMain()
         {
             InitializeComponent();
+            bitacora.Escribir("Programa iniciado");
         }
 
         private void btnCargarImagen_Click(object sender, EventArgs e)
@@ -32,6 +36,7 @@ namespace IterativeMAPEstimation
                 }
                 catch (Exception ex)
                 {
+                   bitacora.Escribir(ex.Message);
 
                     MessageBox.Show(ex.Message);
 

@@ -22,20 +22,21 @@ namespace IterativeMAPEstimation.Bitacora
         path = Application.StartupPath;
         pathArchivo = path + "//bitacora//bitacora.txt";
 
-        try
-        {
-            sw = new StreamWriter(pathArchivo);
-        }
-        catch (Exception ex)
-        {
 
-            MessageBox.Show(ex.Message + "\n" + "Error loading the StreamWriter ");
-        }
     
     }
 
         public void Escribir(string texto)
         {
+            try
+            {
+                sw = new StreamWriter(pathArchivo);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message + "\n" + "Error loading the StreamWriter ");
+            }
             string hora = DateTime.Now.ToShortTimeString();
             sw.WriteLine(fecha + "  " + hora + "  " + texto);
             sw.Close();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +17,26 @@ namespace IterativeMAPEstimation
         public frmMain()
         {
             InitializeComponent();
+        }
+
+        private void btnCargarImagen_Click(object sender, EventArgs e)
+        {
+            if (ofdCargar.ShowDialog() == DialogResult.OK)
+            {
+
+
+                try
+                {
+                    Image<Bgr, Byte> image = new Image<Bgr, byte>(ofdCargar.FileName);
+                    pctImage1.Image = image.ToBitmap();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+
+                }
+            }
         }
     }
 }

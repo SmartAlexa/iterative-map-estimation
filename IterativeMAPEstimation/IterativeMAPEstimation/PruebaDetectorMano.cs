@@ -138,6 +138,8 @@ namespace IterativeMAPEstimation
                     PointF[] points = box.GetVertices();
 
 
+
+
                     Point[] ps = new Point[points.Length];
                     for (int i = 0; i < points.Length; i++)
                         ps[i] = new Point((int)points[i].X, (int)points[i].Y);
@@ -177,16 +179,29 @@ namespace IterativeMAPEstimation
             DetectarCentroPalma(biggestContour.ToList<Point>(), obtenerListaCandidatos(box));
 
 
-            CircleF centerCircle = new CircleF(result.Location, 5f);
-            imagen.Draw(centerCircle, new Bgr(Color.Brown), 56);
 
+            PointF punto = new PointF(430, 430);
+            Point punt = new Point(430, 430);
+            CircleF centerCircle = new CircleF(punto, 5f);
+            //CircleF centerCircle = new CircleF(result.Location, 5f);
+            imagen.Draw(centerCircle, new Bgr(Color.Brown), 3);
+
+           /* 
+            for (int i = 0; i < defects.Total; i++)
+            {
+                LineSegment2D lineaDedoCentro = new LineSegment2D(defectArray[i].StartPoint, punt);
+                imagen.Draw(lineaDedoCentro, new Bgr(Color.Green), 2);
+            
+            }
+            * */
+            
 
             #endregion
 
             #region defects drawing
 
             int fingerNum = 0;
-
+            
             for (int i = 0; i < defects.Total; i++)
             {
                 PointF startPoint = new PointF((float)defectArray[i].StartPoint.X,
@@ -198,34 +213,40 @@ namespace IterativeMAPEstimation
                 PointF endPoint = new PointF((float)defectArray[i].EndPoint.X,
                                                 (float)defectArray[i].EndPoint.Y);
 
+                LineSegment2D lineaDedoCentro = new LineSegment2D(defectArray[i].StartPoint, punt);
+
                 LineSegment2D startDepthLine = new LineSegment2D(defectArray[i].StartPoint, defectArray[i].DepthPoint);
 
-                LineSegment2D depthEndLine = new LineSegment2D(defectArray[i].DepthPoint, defectArray[i].EndPoint);
+                //LineSegment2D depthEndLine = new LineSegment2D(defectArray[i].DepthPoint, defectArray[i].EndPoint);
 
-                CircleF startCircle = new CircleF(startPoint, 5f);
+               CircleF startCircle = new CircleF(startPoint, 5f);
 
                 CircleF depthCircle = new CircleF(depthPoint, 5f);
 
                 CircleF endCircle = new CircleF(endPoint, 5f);
-
+                
                 //Custom heuristic based on some experiment, double check it before use
                 if ((startCircle.Center.Y < box.center.Y || depthCircle.Center.Y < box.center.Y) && (startCircle.Center.Y < depthCircle.Center.Y) && (Math.Sqrt(Math.Pow(startCircle.Center.X - depthCircle.Center.X, 2) + Math.Pow(startCircle.Center.Y - depthCircle.Center.Y, 2)) > box.size.Height / 6.5))
                 {
                     fingerNum++;
-                    imagen.Draw(startDepthLine, new Bgr(Color.Green), 2);
-                    //currentFrame.Draw(depthEndLine, new Bgr(Color.Magenta), 2);
+                    //imagen.Draw(startDepthLine, new Bgr(Color.Green), 2);
+                    //imagen.Draw(depthEndLine, new Bgr(Color.Magenta), 2);
+                    
+                   imagen.Draw(lineaDedoCentro, new Bgr(Color.Green), 2);
                 }
 
+                
 
-               imagen.Draw(startCircle, new Bgr(Color.Red), 2);
-                imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
-                //currentFrame.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
+                imagen.Draw(startCircle, new Bgr(Color.Red), 2);
+                //imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
+                //imagen.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
             }
+             
             #endregion
 
             }
 
-        private void DetectarCentroPalma(IList<Point> contour, IList<Point> candidates)
+        private void DetectarCentroPalma(IList<Point> contour, IList<PointF> candidates)
         {
 
             double[] distances = new double[candidates.Count];
@@ -251,7 +272,7 @@ namespace IterativeMAPEstimation
             }
         
         }
-        private double FindMaxDistance(IList<Point> contourPoints, Point candidate)
+        private double FindMaxDistance(IList<Point> contourPoints, PointF candidate)
         {
             double result = double.MaxValue;
             foreach (var point in contourPoints)
@@ -261,36 +282,36 @@ namespace IterativeMAPEstimation
             return result;
         }
 
-        private List<Point> obtenerListaCandidatos(MCvBox2D box)
+        private List<PointF> obtenerListaCandidatos(MCvBox2D box)
         {
             PointF[] points = box.GetVertices();
 
 
-           int p1 = int.Parse(Math.Round(points[0].X).ToString());
-           int p2 = int.Parse(Math.Round(points[0].Y).ToString());
-           int p3 = int.Parse(Math.Round(points[1].X).ToString());
-           int p4 = int.Parse(Math.Round(points[1].Y).ToString());
-           int p5 = int.Parse(Math.Round(points[2].X).ToString());
-           int p6 = int.Parse(Math.Round(points[2].Y).ToString());
-           int p7 = int.Parse(Math.Round(points[3].X).ToString());
-           int p8 = int.Parse(Math.Round(points[3].Y).ToString());
+           float p1 = points[0].X;
+           float p2 = points[0].Y;
+           float p3 = points[1].X;
+           float p4 = points[1].Y;
+           float p5 = points[2].X;
+           float p6 = points[2].Y;
+           float p7 = points[3].X;
+           float p8 = points[3].Y;
 
-           int[] equises = new int[]
+           float[] equises = new float[]
            {
            p1,p3,p5,p7
            
            };
 
-           int[] yes = new int[]
+           float[] yes = new float[]
            {
            p2,p4,p6,p8
            
            };
 
 
-           int minimo = p1;
-            int maximo = p1;
-           foreach (int i in equises)
+           float minimo = p1;
+            float maximo = p1;
+           foreach (float i in equises)
            {
                if (i < minimo)
                {
@@ -304,10 +325,10 @@ namespace IterativeMAPEstimation
            
            }
 
-           int minimoY = p2;
-           int maximoY = p2;
+           float minimoY = p2;
+           float maximoY = p2;
 
-           foreach (int i in yes)
+           foreach (float i in yes)
            {
                if (i < minimoY)
                {
@@ -321,18 +342,18 @@ namespace IterativeMAPEstimation
 
            }
 
-            Point vertice1 = new Point(minimo, minimoY);
-            Point vertice2 = new Point(maximo, maximoY);
+            PointF vertice1 = new PointF(minimo, minimoY);
+            PointF vertice2 = new PointF(maximo, maximoY);
 
-            List<Point> listaPuntos = new List<Point>();
+            List<PointF> listaPuntos = new List<PointF>();
 
-            for (int i = vertice1.X + 1; i < vertice2.X ; i= i + 4)
+            for (float i = vertice1.X + 1; i < vertice2.X ; i= i + 4)
             {
-                for (int j = vertice1.Y - 1; j < vertice2.Y; j = j + 4)
+                for (float j = vertice1.Y - 1; j < vertice2.Y; j = j + 4)
 
                 {
 
-                    Point punto = new Point(i, j);
+                    PointF punto = new PointF(i, j);
 
                     listaPuntos.Add(punto);
                 

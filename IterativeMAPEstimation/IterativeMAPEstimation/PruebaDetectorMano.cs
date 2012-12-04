@@ -174,10 +174,11 @@ namespace IterativeMAPEstimation
 
             //this.result = null;
 
-            DetectarCentroPalma(biggestContour.ToList<Point>(), filteredHull.ToList<Point>());
+            DetectarCentroPalma(biggestContour.ToList<Point>(), obtenerListaCandidatos(box));
+
 
             CircleF centerCircle = new CircleF(result.Location, 5f);
-            imagen.Draw(centerCircle, new Bgr(Color.Red), 2);
+            imagen.Draw(centerCircle, new Bgr(Color.Brown), 56);
 
 
             #endregion
@@ -262,9 +263,83 @@ namespace IterativeMAPEstimation
 
         private List<Point> obtenerListaCandidatos(MCvBox2D box)
         {
-            foreach Point in 
-            
-        return null;
+            PointF[] points = box.GetVertices();
+
+
+           int p1 = int.Parse(Math.Round(points[0].X).ToString());
+           int p2 = int.Parse(Math.Round(points[0].Y).ToString());
+           int p3 = int.Parse(Math.Round(points[1].X).ToString());
+           int p4 = int.Parse(Math.Round(points[1].Y).ToString());
+           int p5 = int.Parse(Math.Round(points[2].X).ToString());
+           int p6 = int.Parse(Math.Round(points[2].Y).ToString());
+           int p7 = int.Parse(Math.Round(points[3].X).ToString());
+           int p8 = int.Parse(Math.Round(points[3].Y).ToString());
+
+           int[] equises = new int[]
+           {
+           p1,p3,p5,p7
+           
+           };
+
+           int[] yes = new int[]
+           {
+           p2,p4,p6,p8
+           
+           };
+
+
+           int minimo = p1;
+            int maximo = p1;
+           foreach (int i in equises)
+           {
+               if (i < minimo)
+               {
+                   minimo = i;
+               }
+
+               if (i > maximo)
+               {
+                   maximo = i;
+               }
+           
+           }
+
+           int minimoY = p2;
+           int maximoY = p2;
+
+           foreach (int i in yes)
+           {
+               if (i < minimoY)
+               {
+                   minimoY = i;
+               }
+
+               if (i > maximoY)
+               {
+                   maximoY = i;
+               }
+
+           }
+
+            Point vertice1 = new Point(minimo, minimoY);
+            Point vertice2 = new Point(maximo, maximoY);
+
+            List<Point> listaPuntos = new List<Point>();
+
+            for (int i = vertice1.X + 1; i < vertice2.X ; i= i + 4)
+            {
+                for (int j = vertice1.Y - 1; j < vertice2.Y; j = j + 4)
+
+                {
+
+                    Point punto = new Point(i, j);
+
+                    listaPuntos.Add(punto);
+                
+                }
+            }
+
+        return listaPuntos;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
+using HandGestureRecognition.SkinDetector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +22,11 @@ namespace IterativeMAPEstimation
         Image<Bgr, Byte> imagen;
         ImageBox imgCaja;
 
+        Ycc YCrCb_min;
+        Ycc YCrCb_max;
+
         public Bitacora.Bitacora bitacora = new Bitacora.Bitacora();
+        IColorSkinDetector skinDetector;
 
         Seq<Point> hull;
         Seq<Point> filteredHull;
@@ -36,10 +41,12 @@ namespace IterativeMAPEstimation
             InitializeComponent();
 
             detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.NONE);
-      
+
+            YCrCb_min = new Ycc(0, 131, 80);
+            YCrCb_max = new Ycc(255, 185, 135);
 
             imgCaja = new ImageBox();
-            imgCaja.Location = new System.Drawing.Point(50, 50);
+            imgCaja.Location = new System.Drawing.Point(20, 50);
             this.Controls.Add(imgCaja);
             imgCaja.Show();
             
@@ -66,21 +73,32 @@ namespace IterativeMAPEstimation
             imgCaja.Height = imagen.Height;
             imgCaja.Width = imagen.Width;
 
+            this.Height = imgCaja.Height + 100;
+            this.Width = imgCaja.Width + 50;
+
             imgCaja.Image = imagen;
 
-            Image<Gray, Byte> skin = new Image<Gray, byte>(imagen.Width, imagen.Height);
-            detector.Process(imagen,skin);
-            ExtractContourAndHull(skin);
-            
+            //Image<Gray, Byte> skin = new Image<Gray, byte>(imagen.Width, imagen.Height);
+           // detector.Process(imagen,skin);
+
+            skinDetector = new YCrCbSkinDetector();
+
+            Image<Gray, Byte> skin = skinDetector.DetectSkin(imagen, YCrCb_min, YCrCb_max);
+
+            ExtractFeatures(skin);
+
+            //imgCaja.Image = skin;
+
             
 
         }
 
-        private void ExtractContourAndHull(Image<Gray, byte> skin)
+        private void ExtractFeatures(Image<Gray, byte> skin)
         {
             using (MemStorage storage = new MemStorage())
             {
 
+                 #region extractContourAndHull
                 Contour<Point> contours = skin.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, storage);
                 Contour<Point> biggestContour = null;
 
@@ -133,7 +151,50 @@ namespace IterativeMAPEstimation
                     defectArray = defects.ToArray();
                 }
             }
-        }
+
+            #endregion
+
+                 #region defects drawing
+
+            int fingerNum = 0;
+
+            for (int i = 0; i < defects.Total; i++)
+            {
+                PointF startPoint = new PointF((float)defectArray[i].StartPoint.X,
+                                                (float)defectArray[i].StartPoint.Y);
+
+                PointF depthPoint = new PointF((float)defectArray[i].DepthPoint.X,
+                                                (float)defectArray[i].DepthPoint.Y);
+
+                PointF endPoint = new PointF((float)defectArray[i].EndPoint.X,
+                                                (float)defectArray[i].EndPoint.Y);
+
+                LineSegment2D startDepthLine = new LineSegment2D(defectArray[i].StartPoint, defectArray[i].DepthPoint);
+
+                LineSegment2D depthEndLine = new LineSegment2D(defectArray[i].DepthPoint, defectArray[i].EndPoint);
+
+                CircleF startCircle = new CircleF(startPoint, 5f);
+
+                CircleF depthCircle = new CircleF(depthPoint, 5f);
+
+                CircleF endCircle = new CircleF(endPoint, 5f);
+
+                //Custom heuristic based on some experiment, double check it before use
+                if ((startCircle.Center.Y < box.center.Y || depthCircle.Center.Y < box.center.Y) && (startCircle.Center.Y < depthCircle.Center.Y) && (Math.Sqrt(Math.Pow(startCircle.Center.X - depthCircle.Center.X, 2) + Math.Pow(startCircle.Center.Y - depthCircle.Center.Y, 2)) > box.size.Height / 6.5))
+                {
+                    fingerNum++;
+                    imagen.Draw(startDepthLine, new Bgr(Color.Green), 2);
+                    //currentFrame.Draw(depthEndLine, new Bgr(Color.Magenta), 2);
+                }
+
+
+               imagen.Draw(startCircle, new Bgr(Color.Red), 2);
+                imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
+                //currentFrame.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
+            }
+            #endregion
+
+            }
 
         private void DetectarCentroPalma()
         { 

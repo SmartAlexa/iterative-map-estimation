@@ -1,4 +1,6 @@
-﻿using Emgu.CV;
+﻿using CCT.NUI.Core;
+using CCT.NUI.HandTracking;
+using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using HandGestureRecognition.SkinDetector;
@@ -35,6 +37,11 @@ namespace IterativeMAPEstimation
         Rectangle handRect;
         MCvBox2D box;
         Ellipse ellip;
+
+        private float contourReduction;
+        private int searchRadius;
+
+        private Palm result;
 
         public frmPruebaMano()
         {
@@ -95,12 +102,16 @@ namespace IterativeMAPEstimation
 
         private void ExtractFeatures(Image<Gray, byte> skin)
         {
+
+            Contour<Point> currentContour = null;
+            Contour<Point> biggestContour = null;
+
             using (MemStorage storage = new MemStorage())
             {
 
-                 #region extractContourAndHull
+            #region extractContourAndHull
                 Contour<Point> contours = skin.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, storage);
-                Contour<Point> biggestContour = null;
+
 
                 Double Result1 = 0;
                 Double Result2 = 0;
@@ -117,7 +128,7 @@ namespace IterativeMAPEstimation
 
                 if (biggestContour != null)
                 {
-                    Contour<Point> currentContour = biggestContour.ApproxPoly(biggestContour.Perimeter * 0.0025, storage);
+                    currentContour = biggestContour.ApproxPoly(biggestContour.Perimeter * 0.0025, storage);
                     imagen.Draw(currentContour, new Bgr(Color.LimeGreen), 2);
                     biggestContour = currentContour;
 
@@ -154,7 +165,22 @@ namespace IterativeMAPEstimation
 
             #endregion
 
-                 #region defects drawing
+            #region find palm center
+
+            this.searchRadius = 6;
+            this.contourReduction = 3;
+
+            //this.result = null;
+
+            DetectarCentroPalma(biggestContour.ToList<Point>(), biggestContour.ToList<Point>());
+
+            CircleF centerCircle = new CircleF(result.Location, 5f);
+            imagen.Draw(centerCircle, new Bgr(Color.Red), 2);
+
+
+            #endregion
+
+            #region defects drawing
 
             int fingerNum = 0;
 
@@ -196,11 +222,41 @@ namespace IterativeMAPEstimation
 
             }
 
-        private void DetectarCentroPalma()
-        { 
-        
-            
+        private void DetectarCentroPalma(IList<Point> contour, IList<Point> candidates)
+        {
+
+            double[] distances = new double[candidates.Count];
+
+            Parallel.For(0, candidates.Count, (index) =>
+            {
+                distances[index] = FindMaxDistance(contour, candidates[index]);
+            });
+
+            double maxDistance = this.result == null ? 0 : this.result.DistanceToContour;
+            int maxIndex = -1;
+            for (int index = 0; index < distances.Length; index++)
+            {
+                if (distances[index] > maxDistance)
+                {
+                    maxDistance = distances[index];
+                    maxIndex = index;
+                }
+            }
+            if (maxIndex >= 0)
+            {
+                this.result = new Palm(candidates[maxIndex], maxDistance);
+            }
         
         }
+        private double FindMaxDistance(IList<Point> contourPoints, Point candidate)
+        {
+            double result = double.MaxValue;
+            foreach (var point in contourPoints)
+            {
+                result = Math.Min(PointFunctions.Distance(point.X, point.Y, candidate.X, candidate.Y), result);
+            }
+            return result;
+        }
+
     }
 }

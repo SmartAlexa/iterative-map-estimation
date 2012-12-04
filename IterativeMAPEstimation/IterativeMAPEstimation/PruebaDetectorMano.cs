@@ -132,10 +132,10 @@ namespace IterativeMAPEstimation
                         ps[i] = new Point((int)points[i].X, (int)points[i].Y);
 
                     imagen.DrawPolyline(hull.ToArray(), true, new Bgr(200, 125, 75), 2);
-                    imagen.Draw(new CircleF(new PointF(box.center.X, box.center.Y), 3), new Bgr(200, 125, 75), 2);
+                   // imagen.Draw(new CircleF(new PointF(box.center.X, box.center.Y), 3), new Bgr(200, 125, 75), 2);
 
-                    PointF center;
-                    float radius;
+                  //  PointF center;
+                   // float radius;
                    
                     filteredHull = new Seq<Point>(storage);
                     for (int i = 0; i < hull.Total; i++)

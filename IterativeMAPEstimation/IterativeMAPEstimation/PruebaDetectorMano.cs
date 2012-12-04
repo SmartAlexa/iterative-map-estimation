@@ -165,6 +165,8 @@ namespace IterativeMAPEstimation
 
             #endregion
 
+
+
             #region find palm center
 
             this.searchRadius = 6;
@@ -172,7 +174,7 @@ namespace IterativeMAPEstimation
 
             //this.result = null;
 
-            DetectarCentroPalma(biggestContour.ToList<Point>(), biggestContour.ToList<Point>());
+            DetectarCentroPalma(biggestContour.ToList<Point>(), filteredHull.ToList<Point>());
 
             CircleF centerCircle = new CircleF(result.Location, 5f);
             imagen.Draw(centerCircle, new Bgr(Color.Red), 2);
@@ -258,5 +260,11 @@ namespace IterativeMAPEstimation
             return result;
         }
 
+        private List<Point> obtenerListaCandidatos(MCvBox2D box)
+        {
+            foreach Point in 
+            
+        return null;
+        }
     }
 }

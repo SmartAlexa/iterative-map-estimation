@@ -201,7 +201,7 @@ namespace IterativeMAPEstimation
             #region defects drawing
 
             int fingerNum = 0;
-            
+            List<PointF> fingertips = new List<PointF>();
             for (int i = 0; i < defects.Total; i++)
             {
                 PointF startPoint = new PointF((float)defectArray[i].StartPoint.X,
@@ -224,7 +224,9 @@ namespace IterativeMAPEstimation
                 CircleF depthCircle = new CircleF(depthPoint, 5f);
 
                 CircleF endCircle = new CircleF(endPoint, 5f);
-                
+
+
+
                 //Custom heuristic based on some experiment, double check it before use
                 if ((startCircle.Center.Y < box.center.Y || depthCircle.Center.Y < box.center.Y) && (startCircle.Center.Y < depthCircle.Center.Y) && (Math.Sqrt(Math.Pow(startCircle.Center.X - depthCircle.Center.X, 2) + Math.Pow(startCircle.Center.Y - depthCircle.Center.Y, 2)) > box.size.Height / 6.5))
                 {
@@ -233,17 +235,51 @@ namespace IterativeMAPEstimation
                     //imagen.Draw(depthEndLine, new Bgr(Color.Magenta), 2);
                     
                    imagen.Draw(lineaDedoCentro, new Bgr(Color.Green),2);
+                   fingertips.Add(startPoint);
                 }
 
                 imagen.Draw(startCircle, new Bgr(Color.Red), 2);
                 //imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
                //imagen.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
             }
-             
+            List<float> newFingertips = ordenarFingertips(fingertips);
+
             #endregion
 
             }
 
+
+        private List<float> ordenarFingertips(List<PointF> fingertips)
+
+        {
+            List<float> listaNueva = new List<float>();
+
+            for (int i = 0; i < fingertips.Count; i++)
+            {
+                float punto = fingertips.ElementAt(i).X;
+                listaNueva.Add(punto);
+
+            }
+
+            for (int i = 0; i < fingertips.Count; i++)
+            {
+                for (int j = 0; i < fingertips.Count; j++)
+                {
+                    if (fingertips.ElementAt(j).X  > fingertips.ElementAt(j+1).X)
+                    {
+                        // Asignando valores ordenados
+                        float temp = fingertips.ElementAt(j).X;
+                        listaNueva[j] = listaNueva.ElementAt(j+1);
+                        listaNueva[j+1] = temp;
+                    }
+
+                }
+
+            }
+
+            MessageBox.Show(listaNueva.ToString());
+            return listaNueva;
+        }
         private void DetectarCentroPalma(IList<Point> contour, IList<PointF> candidates)
         {
 

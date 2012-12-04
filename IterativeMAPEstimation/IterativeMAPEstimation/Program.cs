@@ -18,7 +18,8 @@ namespace IterativeMAPEstimation
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            Application.Run(new frmPruebaMano());
+           // Application.Run(new frmMain());
             
         }
     }

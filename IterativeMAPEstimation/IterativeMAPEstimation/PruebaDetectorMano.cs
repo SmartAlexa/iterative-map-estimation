@@ -19,6 +19,7 @@ namespace IterativeMAPEstimation
         private string archivo;
         AdaptiveSkinDetector detector;
         Image<Bgr, Byte> imagen;
+        ImageBox imgCaja;
 
         public Bitacora.Bitacora bitacora = new Bitacora.Bitacora();
 
@@ -37,8 +38,11 @@ namespace IterativeMAPEstimation
             detector = new AdaptiveSkinDetector(1, AdaptiveSkinDetector.MorphingMethod.NONE);
       
 
-            ImageBox imgCaja = new ImageBox();
+            imgCaja = new ImageBox();
             imgCaja.Location = new System.Drawing.Point(50, 50);
+            this.Controls.Add(imgCaja);
+            imgCaja.Show();
+            
         }
             
         
@@ -57,10 +61,18 @@ namespace IterativeMAPEstimation
 
         private void procesarImagen()
         {
-            imagen = new Image<Bgr, byte>(archivo); 
+            imagen = new Image<Bgr, byte>(archivo);
+
+            imgCaja.Height = imagen.Height;
+            imgCaja.Width = imagen.Width;
+
+            imgCaja.Image = imagen;
+
             Image<Gray, Byte> skin = new Image<Gray, byte>(imagen.Width, imagen.Height);
             detector.Process(imagen,skin);
             ExtractContourAndHull(skin);
+            
+            
 
         }
 

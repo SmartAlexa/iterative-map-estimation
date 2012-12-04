@@ -215,7 +215,7 @@ namespace IterativeMAPEstimation
 
                 LineSegment2D lineaDedoCentro = new LineSegment2D(defectArray[i].StartPoint, punt);
 
-                LineSegment2D startDepthLine = new LineSegment2D(defectArray[i].StartPoint, defectArray[i].DepthPoint);
+                //LineSegment2D startDepthLine = new LineSegment2D(defectArray[i].StartPoint, defectArray[i].DepthPoint);
 
                 //LineSegment2D depthEndLine = new LineSegment2D(defectArray[i].DepthPoint, defectArray[i].EndPoint);
 
@@ -232,14 +232,12 @@ namespace IterativeMAPEstimation
                     //imagen.Draw(startDepthLine, new Bgr(Color.Green), 2);
                     //imagen.Draw(depthEndLine, new Bgr(Color.Magenta), 2);
                     
-                   imagen.Draw(lineaDedoCentro, new Bgr(Color.Green), 2);
+                   imagen.Draw(lineaDedoCentro, new Bgr(Color.Green),2);
                 }
-
-                
 
                 imagen.Draw(startCircle, new Bgr(Color.Red), 2);
                 //imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
-                //imagen.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
+               //imagen.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
             }
              
             #endregion

@@ -91,7 +91,9 @@ namespace IterativeMAPEstimation
         }
 
 
+        public FeatureVector()
 
+        { }
 
     }
 }

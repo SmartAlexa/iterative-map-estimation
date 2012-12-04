@@ -8,16 +8,16 @@ namespace CCT.NUI.HandTracking
 {
     public class Palm
     {
-        private Point location;
+        private PointF location;
         private double distanceToContour;
 
-        public Palm(Point location, double distanceToContour)
+        public Palm(PointF location, double distanceToContour)
         {
             this.location = location;
             this.distanceToContour = distanceToContour;
         }
 
-        public Point Location
+        public PointF Location
         {
             get { return this.location; }
         }

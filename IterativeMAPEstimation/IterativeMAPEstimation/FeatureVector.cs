@@ -10,6 +10,43 @@ namespace IterativeMAPEstimation
     class FeatureVector
     {
         PointF palmCenter;
+        PointF locationThumb;
+        PointF locationIndexFinger;
+        PointF locationHeartFinger;
+        PointF location4Finger;
+        PointF locationLittleFinger;
+        float thumbAngle;
+        float indexAngle;
+        float heartAngle;
+        float fourthAngle;
+        float littleAngle;
+        float palmSize;
+
+
+
+//CONSTRUCTOR
+
+        public FeatureVector(List<PointF> fingertips,List<float> angles, PointF center, float size)
+        {
+
+            this.locationLittleFinger = fingertips[0];
+            this.location4Finger = fingertips[1];
+            this.locationHeartFinger = fingertips[2];
+            this.locationIndexFinger = fingertips[3];
+            this.locationThumb = fingertips[4];
+
+            this.littleAngle = angles[0];
+            this.fourthAngle = angles[1];
+            this.heartAngle = angles[2];
+            this.indexAngle = angles[3];
+            this.thumbAngle = angles[4];
+
+            this.palmCenter = center;
+            this.palmSize = size;
+        
+        }
+
+//GETTERS AND SETTERS   
 
         public PointF PalmCenter
         {
@@ -17,72 +54,36 @@ namespace IterativeMAPEstimation
             set { palmCenter = value; }
         }
 
-        PointF locationThumb;
 
         public PointF LocationThumb
         {
             get { return locationThumb; }
             set { locationThumb = value; }
         }
-        PointF locationIndexFinger;
 
         public PointF LocationIndexFinger
         {
             get { return locationIndexFinger; }
             set { locationIndexFinger = value; }
         }
-        PointF locationHeartFinger;
 
         public PointF LocationHeartFinger
         {
             get { return locationHeartFinger; }
             set { locationHeartFinger = value; }
         }
-        PointF location4Finger;
 
         public PointF Location4Finger
         {
             get { return location4Finger; }
             set { location4Finger = value; }
         }
-        PointF locationLittleFinger;
 
         public PointF LocationLittleFinger
         {
             get { return locationLittleFinger; }
             set { locationLittleFinger = value; }
         }
-
-        float thumbIndexAngle;
-
-        public float ThumbIndexAngle
-        {
-            get { return thumbIndexAngle; }
-            set { thumbIndexAngle = value; }
-        }
-        float indexHeartAngle;
-
-        public float IndexHeartAngle
-        {
-            get { return indexHeartAngle; }
-            set { indexHeartAngle = value; }
-        }
-        float heartFourthAngle;
-
-        public float HeartFourthAngle
-        {
-            get { return heartFourthAngle; }
-            set { heartFourthAngle = value; }
-        }
-        float fourthLittleAngle;
-
-        public float FourthLittleAngle
-        {
-            get { return fourthLittleAngle; }
-            set { fourthLittleAngle = value; }
-        }
-
-        float palmSize;
 
         public float PalmSize
         {
@@ -91,9 +92,6 @@ namespace IterativeMAPEstimation
         }
 
 
-        public FeatureVector()
-
-        { }
 
     }
 }

@@ -167,8 +167,6 @@ namespace IterativeMAPEstimation
 
             #endregion
 
-
-
             #region find palm center
 
             this.searchRadius = 6;
@@ -242,43 +240,52 @@ namespace IterativeMAPEstimation
                 //imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
                //imagen.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
             }
-            List<float> newFingertips = ordenarFingertips(fingertips);
+
 
             #endregion
 
-            }
+            #region create feature vector
+            List<PointF> newFingertips = ordenarFingertips(fingertips);
+            List<float> angles = calculateFingerAngles(fingertips, punto);
+
+            FeatureVector vector = new FeatureVector(newFingertips,angles,punto,5);
+
+            #endregion
+        }
 
 
-        private List<float> ordenarFingertips(List<PointF> fingertips)
+        private List<PointF> ordenarFingertips(List<PointF> fingertips)
 
         {
-            List<float> listaNueva = new List<float>();
-
+            /*
+            List<PointF> listaNueva = new List<PointF>();
+            
             for (int i = 0; i < fingertips.Count; i++)
             {
                 float punto = fingertips.ElementAt(i).X;
                 listaNueva.Add(punto);
 
             }
+            */
 
-            for (int i = 0; i < fingertips.Count; i++)
+            for (int pasadas = 0; pasadas < fingertips.Count-1; pasadas++)
             {
-                for (int j = 0; i < fingertips.Count; j++)
+                for (int i = 0; i < fingertips.Count - 1 ; i++)
                 {
-                    if (fingertips.ElementAt(j).X  > fingertips.ElementAt(j+1).X)
+                    if (fingertips[i].X > fingertips[i + 1].X)
                     {
-                        // Asignando valores ordenados
-                        float temp = fingertips.ElementAt(j).X;
-                        listaNueva[j] = listaNueva.ElementAt(j+1);
-                        listaNueva[j+1] = temp;
-                    }
 
-                }
+                        PointF temp;      // variable temporal para el intercambio
+                        temp = fingertips[i];
+                        fingertips[i] = fingertips[i+1];
+                        fingertips[i+1] = temp;
+                    
+                    }       
 
-            }
+            }}
 
-            MessageBox.Show(listaNueva.ToString());
-            return listaNueva;
+            //MessageBox.Show(listaNueva.ToString());
+            return fingertips;
         }
         private void DetectarCentroPalma(IList<Point> contour, IList<PointF> candidates)
         {
@@ -395,6 +402,32 @@ namespace IterativeMAPEstimation
             }
 
         return listaPuntos;
+        }
+
+
+        private List<float> calculateFingerAngles(List<PointF> fingertips, PointF center)
+        {
+            List<float> listaAngulos = new List<float>();
+
+            foreach (PointF p in fingertips)
+            {
+
+                float c1 = center.X - p.X;
+                float c2 = center.Y - p.Y;
+
+                float h = float.Parse(Math.Sqrt((c1*c1)+(c2*c2)).ToString());
+
+                float sinAlpha = c2 / h;
+
+                Double angulo = Math.Asin(sinAlpha);
+                Double anguloGrad = (angulo * 360) / (2 * 3.14158);
+                float alpha = float.Parse(anguloGrad.ToString());
+                listaAngulos.Add(alpha);
+            
+            }
+
+
+            return listaAngulos;
         }
     }
 }

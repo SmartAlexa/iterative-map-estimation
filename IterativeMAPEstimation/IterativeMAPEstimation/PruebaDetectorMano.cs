@@ -249,7 +249,11 @@ namespace IterativeMAPEstimation
             List<float> angles = calculateFingerAngles(fingertips, punto);
 
             FeatureVector vector = new FeatureVector(newFingertips,angles,punto,5);
-            MessageBox.Show("Done");
+            //MessageBox.Show("Done");
+
+            frmPruebaDatos datos = new frmPruebaDatos(vector);
+            datos.Show();
+
             #endregion
         }
 

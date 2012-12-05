@@ -15,12 +15,12 @@ namespace IterativeMAPEstimation
         PointF locationHeartFinger;
         PointF location4Finger;
         PointF locationLittleFinger;
-        float thumbAngle;
-        float indexAngle;
-        float heartAngle;
-        float fourthAngle;
-        float littleAngle;
-        float palmSize;
+        public float thumbAngle;
+        public float indexAngle;
+        public float heartAngle;
+        public float fourthAngle;
+        public float littleAngle;
+        public float palmSize;
 
 
 

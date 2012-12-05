@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IterativeMAPEstimation
 {
-    class FeatureVector
+   public class FeatureVector
     {
         PointF palmCenter;
         PointF locationThumb;

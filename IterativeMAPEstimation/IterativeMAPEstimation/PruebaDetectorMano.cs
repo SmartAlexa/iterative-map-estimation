@@ -167,7 +167,7 @@ namespace IterativeMAPEstimation
 
             #endregion
 
-            #region find palm center
+            #region find palm center(needs change)
 
             this.searchRadius = 6;
             this.contourReduction = 3;
@@ -426,6 +426,14 @@ namespace IterativeMAPEstimation
                 Double angulo = Math.Asin(sinAlpha);
                 Double anguloGrad = (angulo * 360) / (2 * 3.14158);
                 float alpha = float.Parse(anguloGrad.ToString());
+
+                if (p.X > center.X)
+                {
+
+                    alpha = 180 - alpha;
+
+                }
+
                 listaAngulos.Add(alpha);
             
             }

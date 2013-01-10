@@ -20,6 +20,12 @@ namespace IterativeMAPEstimation
         public float heartAngle;
         public float fourthAngle;
         public float littleAngle;
+
+        public float thumbIndexAngle;
+        public float indexMiddleAngle;
+        public float middleFourthAngle;
+        public float fourthLittleAngle;
+
         public float palmSize;
 
 
@@ -43,6 +49,11 @@ namespace IterativeMAPEstimation
 
             this.palmCenter = center;
             this.palmSize = size;
+
+            this.thumbIndexAngle = thumbAngle - indexAngle;
+            this.indexMiddleAngle = indexAngle - heartAngle;
+            this.middleFourthAngle = heartAngle - fourthAngle;
+            this.fourthLittleAngle = fourthAngle - littleAngle;
         
         }
 

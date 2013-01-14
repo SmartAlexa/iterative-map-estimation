@@ -90,6 +90,7 @@
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="IColorSkinDetector.cs" />
+    <Compile Include="ObservedImageFunctions.cs" />
     <Compile Include="Palm.cs" />
     <Compile Include="PointFunctions.cs" />
     <Compile Include="Program.cs" />

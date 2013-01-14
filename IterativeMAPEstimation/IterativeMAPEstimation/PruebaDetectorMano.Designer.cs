@@ -30,6 +30,7 @@
         {
             this.btnCargar = new System.Windows.Forms.Button();
             this.opnCargar = new System.Windows.Forms.OpenFileDialog();
+            this.btnExtract = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnCargar
@@ -42,11 +43,22 @@
             this.btnCargar.UseVisualStyleBackColor = true;
             this.btnCargar.Click += new System.EventHandler(this.btnCargar_Click);
             // 
+            // btnExtract
+            // 
+            this.btnExtract.Location = new System.Drawing.Point(13, 381);
+            this.btnExtract.Name = "btnExtract";
+            this.btnExtract.Size = new System.Drawing.Size(113, 23);
+            this.btnExtract.TabIndex = 1;
+            this.btnExtract.Text = "Extract Features";
+            this.btnExtract.UseVisualStyleBackColor = true;
+            this.btnExtract.Click += new System.EventHandler(this.btnExtract_Click);
+            // 
             // frmPruebaMano
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(388, 343);
+            this.ClientSize = new System.Drawing.Size(912, 416);
+            this.Controls.Add(this.btnExtract);
             this.Controls.Add(this.btnCargar);
             this.Name = "frmPruebaMano";
             this.Text = "PruebaDetectorMano";
@@ -58,5 +70,6 @@
 
         private System.Windows.Forms.Button btnCargar;
         private System.Windows.Forms.OpenFileDialog opnCargar;
+        private System.Windows.Forms.Button btnExtract;
     }
 }

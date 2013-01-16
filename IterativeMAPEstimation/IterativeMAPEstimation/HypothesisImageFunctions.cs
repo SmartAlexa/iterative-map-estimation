@@ -18,9 +18,9 @@ namespace IterativeMAPEstimation
 
            fingertips.Add(new PointF(110,220));
            fingertips.Add(new PointF(175, 60));
-           fingertips.Add(new PointF(260, 4));
+           fingertips.Add(new PointF(270, 4));
            fingertips.Add(new PointF(400, 26));
-           fingertips.Add(new PointF(610, 200));
+           fingertips.Add(new PointF(640, 200));
 
 
            PointF punto = new PointF(400, 400);

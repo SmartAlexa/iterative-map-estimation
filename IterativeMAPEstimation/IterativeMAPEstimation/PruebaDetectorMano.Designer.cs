@@ -31,6 +31,8 @@
             this.btnCargar = new System.Windows.Forms.Button();
             this.opnCargar = new System.Windows.Forms.OpenFileDialog();
             this.btnExtract = new System.Windows.Forms.Button();
+            this.btnMAP = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnCargar
@@ -53,16 +55,38 @@
             this.btnExtract.UseVisualStyleBackColor = true;
             this.btnExtract.Click += new System.EventHandler(this.btnExtract_Click);
             // 
+            // btnMAP
+            // 
+            this.btnMAP.Location = new System.Drawing.Point(133, 381);
+            this.btnMAP.Name = "btnMAP";
+            this.btnMAP.Size = new System.Drawing.Size(75, 23);
+            this.btnMAP.TabIndex = 2;
+            this.btnMAP.Text = "MAP";
+            this.btnMAP.UseVisualStyleBackColor = true;
+            this.btnMAP.Click += new System.EventHandler(this.btnMAP_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(225, 390);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(22, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "L =";
+            // 
             // frmPruebaMano
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(912, 416);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnMAP);
             this.Controls.Add(this.btnExtract);
             this.Controls.Add(this.btnCargar);
             this.Name = "frmPruebaMano";
             this.Text = "PruebaDetectorMano";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -71,5 +95,7 @@
         private System.Windows.Forms.Button btnCargar;
         private System.Windows.Forms.OpenFileDialog opnCargar;
         private System.Windows.Forms.Button btnExtract;
+        private System.Windows.Forms.Button btnMAP;
+        private System.Windows.Forms.Label label1;
     }
 }

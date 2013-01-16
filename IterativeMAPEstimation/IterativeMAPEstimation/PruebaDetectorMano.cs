@@ -27,10 +27,13 @@ namespace IterativeMAPEstimation
 
         Image<Bgr, Byte> imagen;
         Image<Bgr, Byte> imagen2;
+        Image<Bgr, Byte> imagen2copia;
 
         Ycc YCrCb_min;
         Ycc YCrCb_max;
 
+        FeatureVector observedImageVector;
+        FeatureVector hypothesisImageVector;
 
         IColorSkinDetector skinDetector;
 
@@ -79,9 +82,12 @@ namespace IterativeMAPEstimation
 
                 imagen = new Image<Bgr, byte>(archivo);
                 imagen2 = new Image<Bgr, byte>(archivo);
+                imagen2copia = new Image<Bgr, byte>(archivo);
 
                 imgCaja.Image = imagen;
                 imgCaja2.Image = imagen2;
+
+                
 
                 imgCaja.Refresh();
                 imgCaja2.Refresh();
@@ -101,8 +107,8 @@ namespace IterativeMAPEstimation
 
             Image<Gray, Byte> skin = skinDetector.DetectSkin(imagen, YCrCb_min, YCrCb_max);
 
-           FeatureVector observedImageVector =  ObservedImageFunctions.ExtractFeatures(skin,imagen);
-           FeatureVector hypothesisImageVector = HypothesisImageFunctions.createFirstHypothesis(imagen2);
+            observedImageVector =  ObservedImageFunctions.ExtractFeatures(skin,imagen);
+           hypothesisImageVector = HypothesisImageFunctions.createFirstHypothesis(imagen2);
 
 
 
@@ -117,6 +123,61 @@ namespace IterativeMAPEstimation
         private void btnExtract_Click(object sender, EventArgs e)
         {
             procesarImagen();
+        }
+
+        private void btnMAP_Click(object sender, EventArgs e)
+        {
+
+            while (MAPestimationOperations.definiteL > 30)
+            {
+
+                FeatureVector newVector = MAPestimationOperations.core(observedImageVector, hypothesisImageVector);
+                hypothesisImageVector = newVector;
+
+                // imagen2 = imagen2copia;
+                //imgCaja2.Image = imagen2;
+                // imgCaja2.Refresh();
+
+                label1.Text = "L = " + MAPestimationOperations.definiteL.ToString();
+
+                label1.Refresh();
+
+                imagen2 = new Image<Bgr, byte>(archivo);
+                imgCaja2.Image = imagen2;
+
+                PointF puntoC = hypothesisImageVector.PalmCenter; ;
+                Point punt = new Point(int.Parse(puntoC.X.ToString()), int.Parse(puntoC.Y.ToString()));
+                CircleF centerCircle = new CircleF(puntoC, 5f);
+                imagen2.Draw(centerCircle, new Bgr(Color.Brown), 3);
+
+                List<PointF> fingertips = new List<PointF>();
+
+                fingertips.Add(hypothesisImageVector.LocationThumb);
+                fingertips.Add(hypothesisImageVector.LocationIndexFinger);
+                fingertips.Add(hypothesisImageVector.LocationHeartFinger);
+                fingertips.Add(hypothesisImageVector.Location4Finger);
+                fingertips.Add(hypothesisImageVector.LocationLittleFinger);
+
+                foreach (PointF p in fingertips)
+                {
+
+                    CircleF circle = new CircleF(p, 5f);
+
+                    imagen2.Draw(circle, new Bgr(Color.Red), 3);
+
+
+                    Point pun = new Point(int.Parse(p.X.ToString()), int.Parse(p.Y.ToString()));
+                    LineSegment2D lineaDedoCentro = new LineSegment2D(pun, punt);
+                    imagen2.Draw(lineaDedoCentro, new Bgr(Color.Green), 2);
+
+                    imgCaja2.Refresh();
+                }
+
+                
+            }
+
+
+            MessageBox.Show("Done!");
         }
     }
 }

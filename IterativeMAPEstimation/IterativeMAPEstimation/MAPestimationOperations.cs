@@ -9,6 +9,8 @@ namespace IterativeMAPEstimation
 {
     public static class MAPestimationOperations
     {
+        public static Double definiteL = 99999;
+
         public static FeatureVector core(FeatureVector original, FeatureVector hypothesis)
         {
             List<PointF> thumbPoints = possiblePositions(hypothesis.LocationThumb);
@@ -19,8 +21,8 @@ namespace IterativeMAPEstimation
             List<PointF> centerPoints = possiblePositions(hypothesis.PalmCenter);
 
             Double mismatch = 0;
-            int cost = 0;
-            Double L=0;
+            Double cost = 0;
+            Double L=9999999;
             FeatureVector finalHypothesis = new FeatureVector();
 
             foreach (PointF pThumb in thumbPoints)
@@ -43,12 +45,12 @@ namespace IterativeMAPEstimation
                                     Double misFourth = mismatchCalc(original.Location4Finger, pFourth);
                                     Double misLittle = mismatchCalc(original.LocationLittleFinger, pLittle);
 
-                                    int costCent = relativeCost(hypothesis.PalmCenter, pCent);
-                                    int costThumb = relativeCost(hypothesis.LocationThumb, pThumb);
-                                    int costIndex = relativeCost(hypothesis.LocationIndexFinger, pIndex);
-                                    int costHeart = relativeCost(hypothesis.LocationHeartFinger, pHeart);
-                                    int costFourth = relativeCost(hypothesis.Location4Finger, pFourth);
-                                    int costLittle = relativeCost(hypothesis.LocationLittleFinger, pLittle);
+                                    Double costCent = relativeCost(hypothesis.PalmCenter, pCent);
+                                    Double costThumb = relativeCost(hypothesis.LocationThumb, pThumb);
+                                    Double costIndex = relativeCost(hypothesis.LocationIndexFinger, pIndex);
+                                    Double costHeart = relativeCost(hypothesis.LocationHeartFinger, pHeart);
+                                    Double costFourth = relativeCost(hypothesis.Location4Finger, pFourth);
+                                    Double costLittle = relativeCost(hypothesis.LocationLittleFinger, pLittle);
 
 
                                     mismatch = misCent + misThumb + misIndex + misHeart + misFourth + misLittle;
@@ -71,6 +73,7 @@ namespace IterativeMAPEstimation
                                     if (L >= newL)
                                     {
                                         L = newL;
+                                        definiteL = newL;
                                         finalHypothesis = newHypothesis;
                                     }
                                 }
@@ -96,7 +99,7 @@ namespace IterativeMAPEstimation
         {
 
             List<PointF> list = new List<PointF>();
-
+            /*
             PointF p1 = new PointF(p.X - 1,p.Y);
             PointF p2 = new PointF(p.X - 1, p.Y - 1);
             PointF p3 = new PointF(p.X - 1, p.Y + 1);
@@ -105,6 +108,16 @@ namespace IterativeMAPEstimation
             PointF p6 = new PointF(p.X + 1, p.Y - 1);
             PointF p7 = new PointF(p.X, p.Y + 1);
             PointF p8 = new PointF(p.X, p.Y - 1);
+             * */
+
+            PointF p1 = new PointF(p.X - 6, p.Y);
+            PointF p2 = new PointF(p.X - 6, p.Y - 6);
+            PointF p3 = new PointF(p.X - 6, p.Y + 6);
+            PointF p4 = new PointF(p.X + 6, p.Y);
+            PointF p5 = new PointF(p.X + 6, p.Y + 6);
+            PointF p6 = new PointF(p.X + 6, p.Y - 6);
+            PointF p7 = new PointF(p.X, p.Y + 6);
+            PointF p8 = new PointF(p.X, p.Y - 6);
 
             list.Add(p);
             list.Add(p1);
@@ -119,9 +132,9 @@ namespace IterativeMAPEstimation
             return list;
         }
 
-        public static int relativeCost(PointF p, PointF p1)
+        public static Double relativeCost(PointF p, PointF p1)
         {
-            int cost = 0;
+            Double cost = 0;
 
             if (p.X == p1.X && p.Y == p1.Y)
             {
@@ -132,12 +145,12 @@ namespace IterativeMAPEstimation
             else if ((p.X != p1.X && p.Y == p1.Y) || (p.X == p1.X && p.Y != p1.Y))
             {
 
-                cost = 1;
+                cost = 0.1;
 
             }
             else
             {
-                cost = 2;
+                cost = 0.2;
             }
 
 

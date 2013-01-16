@@ -31,7 +31,12 @@ namespace IterativeMAPEstimation
 
 
 //CONSTRUCTOR
+        public FeatureVector()
+        {
 
+
+
+        }
         public FeatureVector(List<PointF> fingertips,List<float> angles, PointF center, float size)
         {
 

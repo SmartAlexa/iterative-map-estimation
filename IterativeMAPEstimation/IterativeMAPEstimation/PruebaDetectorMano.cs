@@ -101,14 +101,17 @@ namespace IterativeMAPEstimation
 
             Image<Gray, Byte> skin = skinDetector.DetectSkin(imagen, YCrCb_min, YCrCb_max);
 
-            ExtractFeatures(skin);
+           FeatureVector observedImageVector =  ObservedImageFunctions.ExtractFeatures(skin,imagen);
+           FeatureVector hypothesisImageVector = HypothesisImageFunctions.createFirstHypothesis(imagen2);
+
+
 
             //imgCaja.Image = skin;
 
             imgCaja.Refresh();
+            imgCaja2.Refresh();
 
         }
-
 
 
         private void btnExtract_Click(object sender, EventArgs e)

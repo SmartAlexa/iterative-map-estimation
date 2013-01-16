@@ -12,22 +12,22 @@ using System.Threading.Tasks;
 
 namespace IterativeMAPEstimation
 {
-    public class ObservedImageFunctions
+    public static class ObservedImageFunctions
     {
-        Seq<Point> hull;
-        Seq<Point> filteredHull;
-        Seq<MCvConvexityDefect> defects;
-        MCvConvexityDefect[] defectArray;
-        Rectangle handRect;
-        MCvBox2D box;
-        Ellipse ellip;
+       static Seq<Point> hull;
+       static Seq<Point> filteredHull;
+       static Seq<MCvConvexityDefect> defects;
+       static MCvConvexityDefect[] defectArray;
+       static Rectangle handRect;
+       static MCvBox2D box;
+       static Ellipse ellip;
 
-        private float contourReduction;
-        private int searchRadius;
+       private static float contourReduction;
+        private static int searchRadius;
 
-        private Palm result;
+        private static Palm result;
 
-        public void ExtractFeatures(Image<Gray, byte> skin)
+        public static FeatureVector ExtractFeatures(Image<Gray, byte> skin, Image<Bgr, Byte> imagen)
         {
 
             Contour<Point> currentContour = null;
@@ -36,7 +36,7 @@ namespace IterativeMAPEstimation
             using (MemStorage storage = new MemStorage())
             {
 
-                #region extractContourAndHull
+            #region extractContourAndHull
                 Contour<Point> contours = skin.FindContours(Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, storage);
 
 
@@ -96,8 +96,8 @@ namespace IterativeMAPEstimation
 
             #region find palm center(needs change)
 
-            this.searchRadius = 6;
-            this.contourReduction = 3;
+           searchRadius = 6;
+           contourReduction = 3;
 
             //this.result = null;
 
@@ -123,8 +123,25 @@ namespace IterativeMAPEstimation
 
             #endregion
 
-            #region defects drawing
+            List<PointF> fingertips = defectsDrawing(imagen, ref punt);
 
+            #region create feature vector
+            List<PointF> newFingertips = ordenarFingertips(fingertips);
+            List<float> angles = calculateFingerAngles(fingertips, punto);
+
+            FeatureVector vector = new FeatureVector(newFingertips, angles, punto, 5);
+            //MessageBox.Show("Done");
+
+           // frmPruebaDatos datos = new frmPruebaDatos(vector);
+           // datos.Show();
+
+            #endregion
+
+            return vector;
+        }
+
+        private static List<PointF> defectsDrawing(Image<Bgr, Byte> imagen, ref Point punt)
+        {
             int fingerNum = 0;
             List<PointF> fingertips = new List<PointF>();
             for (int i = 0; i < defects.Total; i++)
@@ -167,23 +184,9 @@ namespace IterativeMAPEstimation
                 //imagen.Draw(depthCircle, new Bgr(Color.Yellow), 5);
                 //imagen.Draw(endCircle, new Bgr(Color.DarkBlue), 4);
             }
-
-
-            #endregion
-
-            #region create feature vector
-            List<PointF> newFingertips = ordenarFingertips(fingertips);
-            List<float> angles = calculateFingerAngles(fingertips, punto);
-
-            FeatureVector vector = new FeatureVector(newFingertips, angles, punto, 5);
-            //MessageBox.Show("Done");
-
-            frmPruebaDatos datos = new frmPruebaDatos(vector);
-            datos.Show();
-
-            #endregion
+            return fingertips;
         }
-        private List<PointF> ordenarFingertips(List<PointF> fingertips)
+        public static List<PointF> ordenarFingertips(List<PointF> fingertips)
         {
             /*
             List<PointF> listaNueva = new List<PointF>();
@@ -216,7 +219,7 @@ namespace IterativeMAPEstimation
             //MessageBox.Show(listaNueva.ToString());
             return fingertips;
         }
-        private void DetectarCentroPalma(IList<Point> contour, IList<PointF> candidates)
+        public static  void DetectarCentroPalma(IList<Point> contour, IList<PointF> candidates)
         {
 
             double[] distances = new double[candidates.Count];
@@ -226,7 +229,7 @@ namespace IterativeMAPEstimation
                 distances[index] = FindMaxDistance(contour, candidates[index]);
             });
 
-            double maxDistance = this.result == null ? 0 : this.result.DistanceToContour;
+            double maxDistance = result == null ? 0 : result.DistanceToContour;
             int maxIndex = -1;
             for (int index = 0; index < distances.Length; index++)
             {
@@ -238,11 +241,11 @@ namespace IterativeMAPEstimation
             }
             if (maxIndex >= 0)
             {
-                this.result = new Palm(candidates[maxIndex], maxDistance);
+                result = new Palm(candidates[maxIndex], maxDistance);
             }
 
         }
-        private double FindMaxDistance(IList<Point> contourPoints, PointF candidate)
+        public static double FindMaxDistance(IList<Point> contourPoints, PointF candidate)
         {
             double result = double.MaxValue;
             foreach (var point in contourPoints)
@@ -251,8 +254,7 @@ namespace IterativeMAPEstimation
             }
             return result;
         }
-
-        private List<PointF> obtenerListaCandidatos(MCvBox2D box)
+        public static List<PointF> obtenerListaCandidatos(MCvBox2D box)
         {
             PointF[] points = box.GetVertices();
 
@@ -331,9 +333,7 @@ namespace IterativeMAPEstimation
 
             return listaPuntos;
         }
-
-
-        private List<float> calculateFingerAngles(List<PointF> fingertips, PointF center)
+        public static List<float> calculateFingerAngles(List<PointF> fingertips, PointF center)
         {
             List<float> listaAngulos = new List<float>();
 

@@ -89,7 +89,9 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="HypothesisImageFunctions.cs" />
     <Compile Include="IColorSkinDetector.cs" />
+    <Compile Include="MAPestimationOperations.cs" />
     <Compile Include="ObservedImageFunctions.cs" />
     <Compile Include="Palm.cs" />
     <Compile Include="PointFunctions.cs" />
@@ -120,6 +122,7 @@
     <EmbeddedResource Include="PruebaDetectorMano.resx">
       <DependentUpon>PruebaDetectorMano.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

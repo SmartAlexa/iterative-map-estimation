@@ -19,7 +19,7 @@ namespace IterativeMAPEstimation
            fingertips.Add(new PointF(110,220));
            fingertips.Add(new PointF(175, 60));
            fingertips.Add(new PointF(270, 4));
-           fingertips.Add(new PointF(400, 26));
+           fingertips.Add(new PointF(410, 26));
            fingertips.Add(new PointF(640, 200));
 
 
@@ -48,6 +48,21 @@ namespace IterativeMAPEstimation
                imagen.Draw(lineaDedoCentro, new Bgr(Color.Green), 2);
            
            }
+
+           Point p1 = new Point(int.Parse((puntoC.X - 90).ToString()), int.Parse((puntoC.Y - 90).ToString()));
+           Point p2 = new Point(int.Parse((puntoC.X - 90).ToString()), int.Parse((puntoC.Y + 90).ToString()));
+           Point p3 = new Point(int.Parse((puntoC.X + 90).ToString()), int.Parse((puntoC.Y - 90).ToString()));
+           Point p4 = new Point(int.Parse((puntoC.X + 90).ToString()), int.Parse((puntoC.Y + 90).ToString()));
+
+           LineSegment2D line = new LineSegment2D(p1, p2);
+           LineSegment2D line1 = new LineSegment2D(p1, p3);
+           LineSegment2D line2 = new LineSegment2D(p3, p4);
+           LineSegment2D line3 = new LineSegment2D(p2, p4);
+
+           imagen.Draw(line, new Bgr(Color.Brown), 3);
+           imagen.Draw(line1, new Bgr(Color.Brown), 3);
+           imagen.Draw(line2, new Bgr(Color.Brown), 3);
+           imagen.Draw(line3, new Bgr(Color.Brown), 3);
 
            return vector;
        

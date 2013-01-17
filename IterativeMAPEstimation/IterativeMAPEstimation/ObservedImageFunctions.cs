@@ -105,8 +105,8 @@ namespace IterativeMAPEstimation
 
 
 
-            PointF punto = new PointF(430, 430);
-            Point punt = new Point(430, 430);
+            PointF punto = new PointF(405, 380);
+            Point punt = new Point(405, 380);
             CircleF centerCircle = new CircleF(punto, 5f);
             //CircleF centerCircle = new CircleF(result.Location, 5f);
             imagen.Draw(centerCircle, new Bgr(Color.Brown), 3);

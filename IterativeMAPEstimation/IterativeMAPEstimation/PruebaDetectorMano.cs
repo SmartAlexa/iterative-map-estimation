@@ -128,7 +128,7 @@ namespace IterativeMAPEstimation
         private void btnMAP_Click(object sender, EventArgs e)
         {
 
-            while (MAPestimationOperations.definiteL > 30)
+            while (MAPestimationOperations.definiteL > 35)
             {
 
                 FeatureVector newVector = MAPestimationOperations.core(observedImageVector, hypothesisImageVector);
@@ -150,6 +150,21 @@ namespace IterativeMAPEstimation
                 CircleF centerCircle = new CircleF(puntoC, 5f);
                 imagen2.Draw(centerCircle, new Bgr(Color.Brown), 3);
 
+                Point p1 = new Point(int.Parse((hypothesisImageVector.PalmCenter.X - 90).ToString()), int.Parse((hypothesisImageVector.PalmCenter.Y - 90).ToString()));
+                Point p2 = new Point(int.Parse((hypothesisImageVector.PalmCenter.X - 90).ToString()), int.Parse((hypothesisImageVector.PalmCenter.Y + 90).ToString()));
+                Point p3 = new Point(int.Parse((hypothesisImageVector.PalmCenter.X + 90).ToString()), int.Parse((hypothesisImageVector.PalmCenter.Y - 90).ToString()));
+                Point p4 = new Point(int.Parse((hypothesisImageVector.PalmCenter.X + 90).ToString()), int.Parse((hypothesisImageVector.PalmCenter.Y + 90).ToString()));
+
+                LineSegment2D line = new LineSegment2D(p1,p2);
+                LineSegment2D line1 = new LineSegment2D(p1,p3);
+                LineSegment2D line2 = new LineSegment2D(p3, p4);
+                LineSegment2D line3 = new LineSegment2D(p2, p4);
+
+                imagen2.Draw(line, new Bgr(Color.Brown), 3);
+                imagen2.Draw(line1, new Bgr(Color.Brown), 3);
+                imagen2.Draw(line2, new Bgr(Color.Brown), 3);
+                imagen2.Draw(line3, new Bgr(Color.Brown), 3);
+
                 List<PointF> fingertips = new List<PointF>();
 
                 fingertips.Add(hypothesisImageVector.LocationThumb);
@@ -162,6 +177,7 @@ namespace IterativeMAPEstimation
                 {
 
                     CircleF circle = new CircleF(p, 5f);
+                    
 
                     imagen2.Draw(circle, new Bgr(Color.Red), 3);
 
